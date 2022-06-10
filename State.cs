@@ -25,10 +25,10 @@ class State
     public void DoStep()
     {
         Group group = groups.MinBy(g => g.metric);
-        Console.WriteLine(group.index + ":");
+        Console.WriteLine($"Adding to {group.index}:");
         Print(group);
         Unit unit = group.PlaceableIn().First();
-        Console.WriteLine("  Selected: " + unit);
+        Console.WriteLine($"  Selected: {unit}");
         PrintMap();
         Console.WriteLine("");
         unit.group = group;
@@ -39,9 +39,9 @@ class State
         return !unplaced.Any();
     }
 
-    public void PrintList(IEnumerable<Unit> list, Group group = null)
+    public void PrintList(IEnumerable<Unit> list, string name, Group group = null)
     {
-        Console.Write(" [");
+        Console.Write($"{name,12}: [");
         foreach (Unit u in list)
         {
             if (u.CanBePlacedIn(group) && u.CanBePlaced())
@@ -70,7 +70,7 @@ class State
     public void Print(Group group = null)
     {
         groups.ForEach(g => g.Print(group));
-        PrintList(unplaced, group);
+        PrintList(unplaced, "unplaced", group);
     }
 
     const string map =

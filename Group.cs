@@ -58,6 +58,6 @@ internal class Group
 
     public void Print(Group group = null)
     {
-        state.PrintList(units, group);
+        state.PrintList(units, $"{index} ({metric})", group);
     }
 }
