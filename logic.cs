@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
 
 namespace districter_threaded
 {
-    static class Globals
+    public static class Globals
     {
         static public string metricID;
         static public string scale;
 
         static private Dictionary<string, List<Unit>> _unitlists =
             new Dictionary<string, List<Unit>>();
-        static public List<Unit> unitlist => _unitlists[scale];
+        static internal List<Unit> unitlist => _unitlists[scale];
 
         static internal void _read()
         {
@@ -888,7 +887,7 @@ namespace districter_threaded
         }
     }
 
-    class Unit : IComparable
+    internal class Unit
     {
         public readonly string code;
         public readonly string name;
@@ -926,29 +925,12 @@ namespace districter_threaded
 
         public override string ToString() => code;
 
-        public bool CanBeLost() => group?.CanLose(this) ?? true;
+        public bool CanBePlaced() => group?.CanLose(this) ?? true;
 
-        // less than zero for smaller, zero for same position, greater than zero for larger
-        public int CompareTo(object obj)
-        {
-            if (obj == null)
-            {
-                return 1;
-            }
-
-            Unit other = obj as Unit;
-            if (other != null)
-                if ((other.group == null) != (group == null))
-                {
-                    return group == null ? 1 : -1;
-                }
-                else
-                {
-                    return this.metric.CompareTo(other.metric);
-                }
-            else
-                throw new ArgumentException("Object is not a Unit");
-        }
+        public bool CanBePlacedIn(Group g) =>
+            g is not null
+            && g != this.group
+            && (!g.adjacent.Any() || g.adjacent.Contains(this.code) || !adjacent.Any());
 
         public void Print()
         {
@@ -961,16 +943,22 @@ namespace districter_threaded
         }
     }
 
-    class Group : IComparable
+    internal class Group
     {
         public double metric => units.Sum(unit => unit.metric);
         public HashSet<Unit> units = new HashSet<Unit>();
+        private readonly State state;
         public HashSet<string> adjacent =>
             new HashSet<string>(
                 units
                     .SelectMany(unit => unit.adjacent)
                     .Where(code => !units.Any(u => u.code == code))
             );
+
+        public Group(State state)
+        {
+            this.state = state;
+        }
 
         public bool CanLose(Unit unit)
         {
@@ -1001,78 +989,86 @@ namespace districter_threaded
             return !border.Any();
         }
 
-        public int CompareTo(object obj)
+        public IEnumerable<Unit> PlaceableIn()
         {
-            if (obj == null)
-            {
-                return 1;
-            }
-
-            Group other = obj as Group;
-            if (other != null)
-                return this.metric.CompareTo(other.metric);
-            else
-                throw new ArgumentException("Object is not a Group");
+            return state.unitlist
+                .Where(unit => unit.CanBePlacedIn(this) && unit.CanBePlaced())
+                .OrderBy(u => u.group != null)
+                .ThenBy(u => metric + u.metric < state.maxAcceptableMetric)
+                .ThenBy(u => u.group?.metric ?? 0)
+                .ThenBy(u => u.metric);
         }
 
-        public void Print()
+        public void Print(Group group = null)
         {
-            Console.WriteLine(" [" + string.Join(", ", units) + "]");
+            state.PrintList(units, group);
         }
     }
 
     class State
     {
         public List<Unit> unitlist;
-        public IEnumerable<Unit> canPlace => unitlist.Where(u => u.CanBeLost());
         public IEnumerable<Unit> unplaced => unitlist.Where(u => u.group == null).ToList();
         public readonly List<Group> groups;
+        public readonly double maxAcceptableMetric,
+            minAcceptableMetric;
 
         public State(int numDist)
         {
             unitlist = new List<Unit>(Globals.unitlist);
-            groups = new List<Group>(from i in Enumerable.Range(0, numDist) select new Group());
+            groups = new List<Group>(from i in Enumerable.Range(0, numDist) select new Group(this));
+
+            double sumMetrics = unitlist.Sum(u => u.metric);
+            double avgMetric = sumMetrics / unitlist.Count;
+            double biggestMetric = unitlist.Max(u => u.metric);
+            maxAcceptableMetric = Math.Max(avgMetric * 1.05, biggestMetric);
+            minAcceptableMetric = avgMetric * 0.95;
         }
 
         public void DoStep()
         {
-            Group group = groups.Min();
-
-            // TODO: precalc some of these?
-            List<Unit> placeable = canPlace
-                .Where(
-                    unit =>
-                        !group.units.Contains(unit)
-                        && (
-                            !group.adjacent.Any()
-                            || group.adjacent.Contains(unit.code)
-                            || unit.adjacent.Count == 0
-                        )
-                )
-                .ToList();
-            Unit unit = canPlace
-                .Where(
-                    unit =>
-                        !group.units.Contains(unit)
-                        && (
-                            !group.adjacent.Any()
-                            || group.adjacent.Contains(unit.code)
-                            || unit.adjacent.Count == 0
-                        )
-                )
-                .Max();
+            Group group = groups.MinBy(g => g.metric);
+            Console.WriteLine(groups.IndexOf(group) + ":");
+            Print(group);
+            Unit unit = group.PlaceableIn().First();
+            Console.WriteLine("  " + unit + "\n");
             unit.group = group;
 
-            Console.WriteLine(unit);
-            Console.WriteLine(" [" + string.Join(", ", placeable) + "]");
-            groups.ForEach(g => g.Print());
-            Console.WriteLine(" [" + string.Join(", ", unplaced) + "]");
-            Console.WriteLine("");
         }
 
         public bool isDone()
         {
             return !unplaced.Any();
+        }
+
+        public void PrintList(IEnumerable<Unit> list, Group group = null)
+        {
+            Console.Write(" [");
+            foreach (Unit u in list)
+            {
+                if (u.CanBePlacedIn(group))
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+                else if (u.CanBePlaced())
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                Console.Write(u);
+                Console.ResetColor();
+
+                if (u != list.Last())
+                {
+                    Console.Write(", ");
+                }
+            }
+            Console.WriteLine("]");
+        }
+
+        public void Print(Group group = null)
+        {
+            groups.ForEach(g => g.Print(group));
+            PrintList(unplaced, group);
         }
     }
 }
