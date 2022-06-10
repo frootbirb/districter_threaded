@@ -14,7 +14,7 @@ class State
 
     public State(int numGroups)
     {
-        unitlist = new List<Unit>(Globals.unitlist);
+        unitlist = Globals.unitlist.ConvertAll(unit => new Unit(unit));
         groups = new List<Group>(from i in Enumerable.Range(0, numGroups) select new Group(this));
 
         double sumMetrics = unitlist.Sum(u => u.metric);

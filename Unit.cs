@@ -41,6 +41,14 @@ internal class Unit
         this.adjacent = adjacent;
     }
 
+    public Unit(Unit other)
+    {
+        this.code = other.code;
+        this.name = other.name;
+        this._metrics = other._metrics;
+        this.adjacent = other.adjacent;
+    }
+
     public override string ToString() => code;
 
     public bool CanBePlaced() => group?.CanLose(this) ?? true;
