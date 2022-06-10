@@ -81,7 +81,7 @@ class State
 |~~--__ |    |   WY   |____  |~~~~~|--| |__ /_-' PA .{,~ CO  (RI)
 |   |  ~~~|~~|        |    ~~\  IA /  `-' |`~ |~_____{/NJ
 |   |     |  '---------,  NE  \----| IL|IN|OH,' ~/~\,|`MD (DE)
-',  \  NV | UT |  CO   |~~~~~~~|    \  | ,'~~\WV/ VA |
+',  \  NV | UT |  CO   |~~~~~~~|    \  | ,'~~\WV/ VA |    (DC)
  | CA\    |    |       |  KA   | MO  \_-~ KY /`~___--\
  ',   \  ,-----|-------+-------'_____/__----~~/  NC  /
   '_   '\|     |      |~~~| OK  |    |  TN  _/-,~~-,/
@@ -91,7 +91,7 @@ class State
              `~'~  \     TX      |LA`--,~~~~-~~,FL\
                     \/~\      /~~~`---`         |  \
                         \    /                   \  |
-                         \  |                     '\'
+      AK      HI         \  |                     '\'
                           `~'";
 
     public void PrintCode(string code)
@@ -212,7 +212,9 @@ class State
         Console.Write(@"/ ");
         PrintCode("VA");
         Console.Write(
-            @" |
+            @" |    (");
+        PrintCode("DC");
+        Console.Write(@")
  | "
         );
         PrintCode("CA");
@@ -268,7 +270,11 @@ class State
             @"\
                     \/~\      /~~~`---`         |  \
                         \    /                   \  |
-                         \  |                     '\'
+      ");
+        PrintCode("AK");
+        Console.Write(@"      ");
+        PrintCode("HI");
+        Console.Write(@"         \  |                     '\'
                           `~'"
         );
     }
