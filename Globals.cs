@@ -8,6 +8,8 @@ public static class Globals
     static private Dictionary<string, List<Unit>> _unitlists = new Dictionary<string, List<Unit>>();
     static internal List<Unit> unitlist => _unitlists[scale];
 
+    static public List<string> metricIDs => unitlist[0].keys;
+
     static internal void _read()
     {
         _unitlists["states"] = new List<Unit>();
@@ -22,7 +24,7 @@ public static class Globals
                     { "Firearms", 161641 },
                     { "Area (mi2)", 52420 },
                     { "Land (mi2)", 50645 },
-                    { "GDP (4908621m)", 232145 },
+                    { "GDP ($1m)", 232145 },
                     { "Food ($1k)", 4103235 },
                     { "% Urban", 59.00 }
                 },
@@ -39,7 +41,7 @@ public static class Globals
                     { "Firearms", 15824 },
                     { "Area (mi2)", 665384 },
                     { "Land (mi2)", 570641 },
-                    { "GDP (734002m)", 55430 },
+                    { "GDP ($1m)", 55430 },
                     { "Food ($1k)", 52987 },
                     { "% Urban", 66.00 }
                 },
@@ -56,7 +58,7 @@ public static class Globals
                     { "Firearms", 179738 },
                     { "Area (mi2)", 113990 },
                     { "Land (mi2)", 113594 },
-                    { "GDP (7378494m)", 368556 },
+                    { "GDP ($1m)", 368556 },
                     { "Food ($1k)", 3065603 },
                     { "% Urban", 89.80 }
                 },
@@ -73,7 +75,7 @@ public static class Globals
                     { "Firearms", 79841 },
                     { "Area (mi2)", 53179 },
                     { "Land (mi2)", 52035 },
-                    { "GDP (3038999m)", 134022 },
+                    { "GDP ($1m)", 134022 },
                     { "Food ($1k)", 6604400 },
                     { "% Urban", 56.20 }
                 },
@@ -90,7 +92,7 @@ public static class Globals
                     { "Firearms", 344622 },
                     { "Area (mi2)", 163695 },
                     { "Land (mi2)", 155779 },
-                    { "GDP (39937489m)", 3155224 },
+                    { "GDP ($1m)", 3155224 },
                     { "Food ($1k)", 31835183 },
                     { "% Urban", 95.00 }
                 },
@@ -107,7 +109,7 @@ public static class Globals
                     { "Firearms", 92435 },
                     { "Area (mi2)", 104094 },
                     { "Land (mi2)", 103642 },
-                    { "GDP (5845526m)", 392348 },
+                    { "GDP ($1m)", 392348 },
                     { "Food ($1k)", 5501155 },
                     { "% Urban", 86.20 }
                 },
@@ -124,7 +126,7 @@ public static class Globals
                     { "Firearms", 82400 },
                     { "Area (mi2)", 5543 },
                     { "Land (mi2)", 4842 },
-                    { "GDP (3563077m)", 287560 },
+                    { "GDP ($1m)", 287560 },
                     { "Food ($1k)", 526580 },
                     { "% Urban", 88.00 }
                 },
@@ -141,7 +143,7 @@ public static class Globals
                     { "Firearms", 4852 },
                     { "Area (mi2)", 2489 },
                     { "Land (mi2)", 1949 },
-                    { "GDP (982895m)", 75765 },
+                    { "GDP ($1m)", 75765 },
                     { "Food ($1k)", 933843 },
                     { "% Urban", 83.30 }
                 },
@@ -158,7 +160,7 @@ public static class Globals
                     { "Firearms", 164058 },
                     { "Area (mi2)", 68 },
                     { "Land (mi2)", 61 },
-                    { "GDP (633427m)", 146996 },
+                    { "GDP ($1m)", 146996 },
                     { "Food ($1k)", 0 },
                     { "% Urban", 100.00 }
                 },
@@ -175,7 +177,7 @@ public static class Globals
                     { "Firearms", 343288 },
                     { "Area (mi2)", 65758 },
                     { "Land (mi2)", 53625 },
-                    { "GDP (21992985m)", 1100721 },
+                    { "GDP ($1m)", 1100721 },
                     { "Food ($1k)", 6843731 },
                     { "% Urban", 91.20 }
                 },
@@ -192,7 +194,7 @@ public static class Globals
                     { "Firearms", 190050 },
                     { "Area (mi2)", 59425 },
                     { "Land (mi2)", 57513 },
-                    { "GDP (10736059m)", 619818 },
+                    { "GDP ($1m)", 619818 },
                     { "Food ($1k)", 6107025 },
                     { "% Urban", 75.10 }
                 },
@@ -209,7 +211,7 @@ public static class Globals
                     { "Firearms", 7859 },
                     { "Area (mi2)", 10932 },
                     { "Land (mi2)", 6423 },
-                    { "GDP (1412687m)", 97664 },
+                    { "GDP ($1m)", 97664 },
                     { "Food ($1k)", 549830 },
                     { "% Urban", 91.90 }
                 },
@@ -226,7 +228,7 @@ public static class Globals
                     { "Firearms", 49566 },
                     { "Area (mi2)", 83569 },
                     { "Land (mi2)", 82643 },
-                    { "GDP (1826156m)", 81493 },
+                    { "GDP ($1m)", 81493 },
                     { "Food ($1k)", 4349253 },
                     { "% Urban", 70.60 }
                 },
@@ -243,7 +245,7 @@ public static class Globals
                     { "Firearms", 146487 },
                     { "Area (mi2)", 57914 },
                     { "Land (mi2)", 55519 },
-                    { "GDP (12659682m)", 901572 },
+                    { "GDP ($1m)", 901572 },
                     { "Food ($1k)", 9708304 },
                     { "% Urban", 88.50 }
                 },
@@ -260,7 +262,7 @@ public static class Globals
                     { "Firearms", 114019 },
                     { "Area (mi2)", 36420 },
                     { "Land (mi2)", 35826 },
-                    { "GDP (6745354m)", 379133 },
+                    { "GDP ($1m)", 379133 },
                     { "Food ($1k)", 6043191 },
                     { "% Urban", 72.40 }
                 },
@@ -277,7 +279,7 @@ public static class Globals
                     { "Firearms", 28494 },
                     { "Area (mi2)", 56273 },
                     { "Land (mi2)", 55857 },
-                    { "GDP (3179849m)", 195858 },
+                    { "GDP ($1m)", 195858 },
                     { "Food ($1k)", 14652946 },
                     { "% Urban", 64.00 }
                 },
@@ -294,7 +296,7 @@ public static class Globals
                     { "Firearms", 52634 },
                     { "Area (mi2)", 82278 },
                     { "Land (mi2)", 81759 },
-                    { "GDP (2910357m)", 174183 },
+                    { "GDP ($1m)", 174183 },
                     { "Food ($1k)", 9502727 },
                     { "% Urban", 74.20 }
                 },
@@ -311,7 +313,7 @@ public static class Globals
                     { "Firearms", 81058 },
                     { "Area (mi2)", 40408 },
                     { "Land (mi2)", 39486 },
-                    { "GDP (4499692m)", 215586 },
+                    { "GDP ($1m)", 215586 },
                     { "Food ($1k)", 4126185 },
                     { "% Urban", 58.40 }
                 },
@@ -328,7 +330,7 @@ public static class Globals
                     { "Firearms", 116831 },
                     { "Area (mi2)", 52378 },
                     { "Land (mi2)", 43204 },
-                    { "GDP (4645184m)", 264853 },
+                    { "GDP ($1m)", 264853 },
                     { "Food ($1k)", 2225803 },
                     { "% Urban", 73.20 }
                 },
@@ -345,7 +347,7 @@ public static class Globals
                     { "Firearms", 15371 },
                     { "Area (mi2)", 35380 },
                     { "Land (mi2)", 30843 },
-                    { "GDP (1345790m)", 67905 },
+                    { "GDP ($1m)", 67905 },
                     { "Food ($1k)", 553830 },
                     { "% Urban", 38.70 }
                 },
@@ -362,7 +364,7 @@ public static class Globals
                     { "Firearms", 103109 },
                     { "Area (mi2)", 12406 },
                     { "Land (mi2)", 9707 },
-                    { "GDP (6083116m)", 430388 },
+                    { "GDP ($1m)", 430388 },
                     { "Food ($1k)", 1743357 },
                     { "% Urban", 87.20 }
                 },
@@ -379,7 +381,7 @@ public static class Globals
                     { "Firearms", 37152 },
                     { "Area (mi2)", 10554 },
                     { "Land (mi2)", 7800 },
-                    { "GDP (6976597m)", 599092 },
+                    { "GDP ($1m)", 599092 },
                     { "Food ($1k)", 413954 },
                     { "% Urban", 92.00 }
                 },
@@ -396,7 +398,7 @@ public static class Globals
                     { "Firearms", 65742 },
                     { "Area (mi2)", 96714 },
                     { "Land (mi2)", 56539 },
-                    { "GDP (10045029m)", 543977 },
+                    { "GDP ($1m)", 543977 },
                     { "Food ($1k)", 4312320 },
                     { "% Urban", 74.60 }
                 },
@@ -413,7 +415,7 @@ public static class Globals
                     { "Firearms", 79307 },
                     { "Area (mi2)", 86936 },
                     { "Land (mi2)", 79627 },
-                    { "GDP (5700671m)", 383094 },
+                    { "GDP ($1m)", 383094 },
                     { "Food ($1k)", 9794912 },
                     { "% Urban", 73.30 }
                 },
@@ -430,7 +432,7 @@ public static class Globals
                     { "Firearms", 35494 },
                     { "Area (mi2)", 48432 },
                     { "Land (mi2)", 46923 },
-                    { "GDP (2989260m)", 119497 },
+                    { "GDP ($1m)", 119497 },
                     { "Food ($1k)", 4089158 },
                     { "% Urban", 49.30 }
                 },
@@ -447,7 +449,7 @@ public static class Globals
                     { "Firearms", 72995 },
                     { "Area (mi2)", 69707 },
                     { "Land (mi2)", 68742 },
-                    { "GDP (6169270m)", 334286 },
+                    { "GDP ($1m)", 334286 },
                     { "Food ($1k)", 5818727 },
                     { "% Urban", 70.40 }
                 },
@@ -464,7 +466,7 @@ public static class Globals
                     { "Firearms", 22133 },
                     { "Area (mi2)", 147040 },
                     { "Land (mi2)", 145546 },
-                    { "GDP (1086759m)", 52470 },
+                    { "GDP ($1m)", 52470 },
                     { "Food ($1k)", 2238979 },
                     { "% Urban", 55.90 }
                 },
@@ -481,7 +483,7 @@ public static class Globals
                     { "Firearms", 22234 },
                     { "Area (mi2)", 77348 },
                     { "Land (mi2)", 76824 },
-                    { "GDP (1952570m)", 127941 },
+                    { "GDP ($1m)", 127941 },
                     { "Food ($1k)", 11779728 },
                     { "% Urban", 73.10 }
                 },
@@ -498,7 +500,7 @@ public static class Globals
                     { "Firearms", 76888 },
                     { "Area (mi2)", 110572 },
                     { "Land (mi2)", 109781 },
-                    { "GDP (3139658m)", 178622 },
+                    { "GDP ($1m)", 178622 },
                     { "Food ($1k)", 454344 },
                     { "% Urban", 94.20 }
                 },
@@ -515,7 +517,7 @@ public static class Globals
                     { "Firearms", 64135 },
                     { "Area (mi2)", 9349 },
                     { "Land (mi2)", 8953 },
-                    { "GDP (1371246m)", 89152 },
+                    { "GDP ($1m)", 89152 },
                     { "Food ($1k)", 168871 },
                     { "% Urban", 60.30 }
                 },
@@ -532,7 +534,7 @@ public static class Globals
                     { "Firearms", 57505 },
                     { "Area (mi2)", 8723 },
                     { "Land (mi2)", 7354 },
-                    { "GDP (8936574m)", 648984 },
+                    { "GDP ($1m)", 648984 },
                     { "Food ($1k)", 866719 },
                     { "% Urban", 94.70 }
                 },
@@ -549,7 +551,7 @@ public static class Globals
                     { "Firearms", 97580 },
                     { "Area (mi2)", 121590 },
                     { "Land (mi2)", 121298 },
-                    { "GDP (2096640m)", 104349 },
+                    { "GDP ($1m)", 104349 },
                     { "Food ($1k)", 2564863 },
                     { "% Urban", 77.40 }
                 },
@@ -566,7 +568,7 @@ public static class Globals
                     { "Firearms", 76207 },
                     { "Area (mi2)", 54555 },
                     { "Land (mi2)", 47126 },
-                    { "GDP (19440469m)", 1740745 },
+                    { "GDP ($1m)", 1740745 },
                     { "Food ($1k)", 3653431 },
                     { "% Urban", 87.90 }
                 },
@@ -583,7 +585,7 @@ public static class Globals
                     { "Firearms", 152238 },
                     { "Area (mi2)", 53819 },
                     { "Land (mi2)", 48618 },
-                    { "GDP (10611862m)", 590711 },
+                    { "GDP ($1m)", 590711 },
                     { "Food ($1k)", 8210497 },
                     { "% Urban", 66.10 }
                 },
@@ -600,7 +602,7 @@ public static class Globals
                     { "Firearms", 13272 },
                     { "Area (mi2)", 70698 },
                     { "Land (mi2)", 69001 },
-                    { "GDP (761723m)", 57106 },
+                    { "GDP ($1m)", 57106 },
                     { "Food ($1k)", 4090864 },
                     { "% Urban", 59.90 }
                 },
@@ -617,7 +619,7 @@ public static class Globals
                     { "Firearms", 173405 },
                     { "Area (mi2)", 44826 },
                     { "Land (mi2)", 40861 },
-                    { "GDP (11747694m)", 701438 },
+                    { "GDP ($1m)", 701438 },
                     { "Food ($1k)", 5459380 },
                     { "% Urban", 77.90 }
                 },
@@ -634,7 +636,7 @@ public static class Globals
                     { "Firearms", 71269 },
                     { "Area (mi2)", 69899 },
                     { "Land (mi2)", 68595 },
-                    { "GDP (3954821m)", 206254 },
+                    { "GDP ($1m)", 206254 },
                     { "Food ($1k)", 5054570 },
                     { "% Urban", 66.20 }
                 },
@@ -651,7 +653,7 @@ public static class Globals
                     { "Firearms", 61383 },
                     { "Area (mi2)", 98379 },
                     { "Land (mi2)", 95988 },
-                    { "GDP (4301089m)", 253036 },
+                    { "GDP ($1m)", 253036 },
                     { "Food ($1k)", 3691554 },
                     { "% Urban", 81.00 }
                 },
@@ -668,7 +670,7 @@ public static class Globals
                     { "Firearms", 236377 },
                     { "Area (mi2)", 46054 },
                     { "Land (mi2)", 44743 },
-                    { "GDP (12820878m)", 817216 },
+                    { "GDP ($1m)", 817216 },
                     { "Food ($1k)", 4859336 },
                     { "% Urban", 78.70 }
                 },
@@ -685,7 +687,7 @@ public static class Globals
                     { "Firearms", 4223 },
                     { "Area (mi2)", 1545 },
                     { "Land (mi2)", 1034 },
-                    { "GDP (1056161m)", 63903 },
+                    { "GDP ($1m)", 63903 },
                     { "Food ($1k)", 63825 },
                     { "% Urban", 90.70 }
                 },
@@ -702,7 +704,7 @@ public static class Globals
                     { "Firearms", 105601 },
                     { "Area (mi2)", 32020 },
                     { "Land (mi2)", 30061 },
-                    { "GDP (5210095m)", 247711 },
+                    { "GDP ($1m)", 247711 },
                     { "Food ($1k)", 1909099 },
                     { "% Urban", 66.30 }
                 },
@@ -719,7 +721,7 @@ public static class Globals
                     { "Firearms", 21130 },
                     { "Area (mi2)", 77116 },
                     { "Land (mi2)", 75811 },
-                    { "GDP (903027m)", 53692 },
+                    { "GDP ($1m)", 53692 },
                     { "Food ($1k)", 4877484 },
                     { "% Urban", 56.70 }
                 },
@@ -736,7 +738,7 @@ public static class Globals
                     { "Firearms", 99159 },
                     { "Area (mi2)", 42144 },
                     { "Land (mi2)", 41235 },
-                    { "GDP (6897576m)", 382275 },
+                    { "GDP ($1m)", 382275 },
                     { "Food ($1k)", 2561984 },
                     { "% Urban", 66.40 }
                 },
@@ -753,7 +755,7 @@ public static class Globals
                     { "Firearms", 588696 },
                     { "Area (mi2)", 268596 },
                     { "Land (mi2)", 261232 },
-                    { "GDP (29472295m)", 1896063 },
+                    { "GDP ($1m)", 1896063 },
                     { "Food ($1k)", 16498398 },
                     { "% Urban", 84.70 }
                 },
@@ -770,7 +772,7 @@ public static class Globals
                     { "Firearms", 72856 },
                     { "Area (mi2)", 84897 },
                     { "Land (mi2)", 82170 },
-                    { "GDP (3282115m)", 189809 },
+                    { "GDP ($1m)", 189809 },
                     { "Food ($1k)", 1253154 },
                     { "% Urban", 90.60 }
                 },
@@ -787,7 +789,7 @@ public static class Globals
                     { "Firearms", 5872 },
                     { "Area (mi2)", 9616 },
                     { "Land (mi2)", 9217 },
-                    { "GDP (628061m)", 34973 },
+                    { "GDP ($1m)", 34973 },
                     { "Food ($1k)", 581773 },
                     { "% Urban", 38.90 }
                 },
@@ -804,7 +806,7 @@ public static class Globals
                     { "Firearms", 307822 },
                     { "Area (mi2)", 42775 },
                     { "Land (mi2)", 39490 },
-                    { "GDP (8626207m)", 557144 },
+                    { "GDP ($1m)", 557144 },
                     { "Food ($1k)", 2684393 },
                     { "% Urban", 75.50 }
                 },
@@ -821,7 +823,7 @@ public static class Globals
                     { "Firearms", 91835 },
                     { "Area (mi2)", 71298 },
                     { "Land (mi2)", 66456 },
-                    { "GDP (7797095m)", 603772 },
+                    { "GDP ($1m)", 603772 },
                     { "Food ($1k)", 5868196 },
                     { "% Urban", 84.00 }
                 },
@@ -838,7 +840,7 @@ public static class Globals
                     { "Firearms", 35264 },
                     { "Area (mi2)", 24230 },
                     { "Land (mi2)", 24038 },
-                    { "GDP (1778070m)", 78270 },
+                    { "GDP ($1m)", 78270 },
                     { "Food ($1k)", 422871 },
                     { "% Urban", 48.70 }
                 },
@@ -855,7 +857,7 @@ public static class Globals
                     { "Firearms", 64878 },
                     { "Area (mi2)", 65496 },
                     { "Land (mi2)", 54158 },
-                    { "GDP (5851754m)", 348822 },
+                    { "GDP ($1m)", 348822 },
                     { "Food ($1k)", 6864150 },
                     { "% Urban", 70.20 }
                 },
@@ -872,7 +874,7 @@ public static class Globals
                     { "Firearms", 132806 },
                     { "Area (mi2)", 97813 },
                     { "Land (mi2)", 97093 },
-                    { "GDP (567025m)", 39610 },
+                    { "GDP ($1m)", 39610 },
                     { "Food ($1k)", 1104702 },
                     { "% Urban", 64.80 }
                 },

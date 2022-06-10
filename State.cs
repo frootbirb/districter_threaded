@@ -12,16 +12,18 @@ class State
     public readonly double maxAcceptableMetric,
         minAcceptableMetric;
 
-    public State(int numDist)
+    public State(int numGroups)
     {
         unitlist = new List<Unit>(Globals.unitlist);
-        groups = new List<Group>(from i in Enumerable.Range(0, numDist) select new Group(this));
+        groups = new List<Group>(from i in Enumerable.Range(0, numGroups) select new Group(this));
 
         double sumMetrics = unitlist.Sum(u => u.metric);
-        double avgMetric = sumMetrics / numDist;
+        double avgMetric = sumMetrics / numGroups;
         double biggestMetric = unitlist.Max(u => u.metric);
         maxAcceptableMetric = Math.Max(avgMetric * 1.05, biggestMetric);
         minAcceptableMetric = avgMetric * 0.95;
+
+        Console.WriteLine($"Initialized for {numGroups} groups of {Globals.scale}, sorted by {Globals.metricID}");
     }
 
     public bool DoStep()

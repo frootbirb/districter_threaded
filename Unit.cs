@@ -25,6 +25,7 @@ internal class Unit
     public HashSet<string> adjacent;
 
     private readonly Dictionary<string, double> _metrics;
+    internal List<string> keys => _metrics.Keys.ToList();
     public double metric => _metrics[Globals.metricID];
 
     public Unit(
