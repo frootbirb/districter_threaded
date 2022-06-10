@@ -16,7 +16,7 @@ class State
         groups = new List<Group>(from i in Enumerable.Range(0, numDist) select new Group(this));
 
         double sumMetrics = unitlist.Sum(u => u.metric);
-        double avgMetric = sumMetrics / unitlist.Count;
+        double avgMetric = sumMetrics / numDist;
         double biggestMetric = unitlist.Max(u => u.metric);
         maxAcceptableMetric = Math.Max(avgMetric * 1.05, biggestMetric);
         minAcceptableMetric = avgMetric * 0.95;
@@ -26,15 +26,23 @@ class State
     {
         Group group = groups.MinBy(g => g.metric);
         Console.WriteLine($"Adding to {group.index}:");
-        Print(group);
-        Unit unit = group
+        PrintList(group
             .PlaceableIn()
-            .OrderBy(u => u.group != null)
-            // Proximity calc
+            .OrderBy(u => u.group == null)
+            .ThenBy(u => group.units.Where(unit => u.adjacent.Contains(unit.code)).Count())
             .ThenBy(u => group.metric + u.metric < maxAcceptableMetric)
             .ThenBy(u => -u.group?.metric ?? 0)
             .ThenBy(u => u.metric)
-            .First();
+            .Reverse(), "placeable");
+        Print(group);
+        Unit unit = group
+            .PlaceableIn()
+            .OrderBy(u => u.group == null)
+            .ThenBy(u => group.units.Where(unit => u.adjacent.Contains(unit.code)).Count())
+            .ThenBy(u => group.metric + u.metric < maxAcceptableMetric)
+            .ThenBy(u => -u.group?.metric ?? 0)
+            .ThenBy(u => u.metric)
+            .Last();
         Console.WriteLine($"  Selected: {unit}");
         PrintMap();
         Console.WriteLine("");
@@ -254,7 +262,7 @@ class State
         Console.Write(@"  | ");
         PrintCode("NM");
         Console.Write(@"   |   |_    | ");
-        PrintCode("AK");
+        PrintCode("AR");
         Console.Write(@" /~~|~~\    \,/");
         PrintCode("SC");
         Console.Write(
