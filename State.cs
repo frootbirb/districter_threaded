@@ -25,10 +25,12 @@ class State
     public void DoStep()
     {
         Group group = groups.MinBy(g => g.metric);
-        Console.WriteLine(groups.IndexOf(group) + ":");
+        Console.WriteLine(group.index + ":");
         Print(group);
         Unit unit = group.PlaceableIn().First();
-        Console.WriteLine("  " + unit + "\n");
+        Console.WriteLine("  Selected: " + unit);
+        PrintMap();
+        Console.WriteLine("");
         unit.group = group;
     }
 
@@ -96,8 +98,7 @@ class State
 
     public void PrintCode(string code)
     {
-        int groupIndex = groups.IndexOf(unitlist.Where(u => u.code == code).FirstOrDefault().group);
-        switch(groups.IndexOf(unitlist.Where(u => u.code == code).FirstOrDefault().group))
+        switch (unitlist.Where(u => u.code == code).FirstOrDefault().group?.index ?? -1)
         {
             case 0:
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -116,6 +117,8 @@ class State
                 break;
             case 5:
                 Console.ForegroundColor = ConsoleColor.Yellow;
+                break;
+            default:
                 break;
         }
         Console.Write(code);
@@ -161,12 +164,12 @@ class State
 /       | "
         );
         PrintCode("ID");
-        Console.Write(
-            @" |~~~~~~~~|  ");
+        Console.Write(@" |~~~~~~~~|  ");
         PrintCode("SD");
         Console.Write(@"  \    \   | | '~\  |_____,|~,-' ");
         PrintCode("MA");
-        Console.Write(@"
+        Console.Write(
+            @"
 |~~--__ |    |   "
         );
         PrintCode("WY");
@@ -211,10 +214,10 @@ class State
         PrintCode("WV");
         Console.Write(@"/ ");
         PrintCode("VA");
-        Console.Write(
-            @" |    (");
+        Console.Write(@" |    (");
         PrintCode("DC");
-        Console.Write(@")
+        Console.Write(
+            @")
  | "
         );
         PrintCode("CA");
@@ -270,12 +273,15 @@ class State
             @"\
                     \/~\      /~~~`---`         |  \
                         \    /                   \  |
-      ");
+      "
+        );
         PrintCode("AK");
         Console.Write(@"      ");
         PrintCode("HI");
-        Console.Write(@"         \  |                     '\'
+        Console.Write(
+            @"         \  |                     '\'
                           `~'"
         );
+        Console.WriteLine("");
     }
 }
