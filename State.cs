@@ -42,11 +42,15 @@ class State
         Console.Write(" [");
         foreach (Unit u in list)
         {
-            if (u.CanBePlacedIn(group))
+            if (u.CanBePlacedIn(group) && u.CanBePlaced())
             {
                 Console.ForegroundColor = ConsoleColor.Green;
             }
-            else if (u.CanBePlaced())
+            else if (u.CanBePlacedIn(group))
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            }
+            else if (!u.CanBePlaced())
             {
                 Console.ForegroundColor = ConsoleColor.Red;
             }
