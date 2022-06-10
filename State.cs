@@ -1,3 +1,5 @@
+//#define PRINT
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,36 +24,39 @@ class State
         minAcceptableMetric = avgMetric * 0.95;
     }
 
-    public void DoStep()
+    public bool DoStep()
     {
-        Group group = groups.MinBy(g => g.metric);
+        Group group = groups
+            .OrderBy(g => g.units.Any())
+            .ThenBy(g => !unplaced.Any(u => g.adjacent.Contains(u.code)))
+            .ThenBy(g => g.metric)
+            .First();
+#if PRINT
         Console.WriteLine($"Adding to {group.index}:");
-        PrintList(group
-            .PlaceableIn()
-            .OrderBy(u => u.group == null)
-            .ThenBy(u => group.units.Where(unit => u.adjacent.Contains(unit.code)).Count())
-            .ThenBy(u => group.metric + u.metric < maxAcceptableMetric)
-            .ThenBy(u => -u.group?.metric ?? 0)
-            .ThenBy(u => u.metric)
-            .Reverse(), "placeable");
+        PrintList(group.sortedPlaceable.Reverse(), "placeable");
         Print(group);
-        Unit unit = group
-            .PlaceableIn()
-            .OrderBy(u => u.group == null)
-            .ThenBy(u => group.units.Where(unit => u.adjacent.Contains(unit.code)).Count())
-            .ThenBy(u => group.metric + u.metric < maxAcceptableMetric)
-            .ThenBy(u => -u.group?.metric ?? 0)
-            .ThenBy(u => u.metric)
-            .Last();
-        Console.WriteLine($"  Selected: {unit}");
-        PrintMap();
+#endif
+        Unit unit = group.sortedPlaceable.LastOrDefault();
+        if (unit != null)
+        {
+#if PRINT
+            Console.WriteLine($"  Selected: {unit}");
+            PrintMap();
+            Console.WriteLine("");
+#endif
+            unit.group = group;
+            return !isDone();
+        }
+
+#if PRINT
         Console.WriteLine("");
-        unit.group = group;
+#endif
+        return false;
     }
 
     public bool isDone()
     {
-        return !unplaced.Any();
+        return !unplaced.Any() && groups.All(g => g.metric > minAcceptableMetric);
     }
 
     public void PrintList(IEnumerable<Unit> list, string name, Group group = null)
@@ -128,10 +133,10 @@ class State
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 break;
             case 4:
-                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 break;
             case 5:
-                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 break;
             default:
                 break;

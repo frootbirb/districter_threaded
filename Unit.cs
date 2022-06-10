@@ -8,12 +8,14 @@ internal class Unit
     public readonly string name;
 
     private Group _group;
+    private Group lastGroup;
     public Group group
     {
         get { return _group; }
         set
         {
             _group?.units.Remove(this);
+            lastGroup = _group;
             _group = value;
             _group.units.Add(this);
         }
@@ -45,6 +47,7 @@ internal class Unit
     public bool CanBePlacedIn(Group g) =>
         g is not null
         && g != this.group
+        && g != this.lastGroup
         && (!g.adjacent.Any() || g.adjacent.Contains(this.code) || !adjacent.Any());
 
     public void Print()
