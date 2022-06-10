@@ -8,10 +8,13 @@ namespace districter_threaded
         static void Main(string[] args)
         {
             Globals._read();
-            Program.Solve(3, "Area (mi2)", "states");
+            State state = Program.Solve(3, "Area (mi2)", "states");
+
+            state.groups.ForEach(g => g.Print());
+            Console.WriteLine(state.groups.Sum(g => g.units.Count));
         }
 
-        static public void Solve(int numGroups, string metricID, string scale) 
+        static public State Solve(int numGroups, string metricID, string scale) 
         {
             Globals.scale = scale;
             Globals.metricID = metricID;
@@ -21,8 +24,7 @@ namespace districter_threaded
                 state.DoStep();
             }
 
-            state.groups.ForEach(g => g.Print());
-            Console.WriteLine(state.groups.Sum(g => g.units.Count));
+            return state;
         }
     }
 }
