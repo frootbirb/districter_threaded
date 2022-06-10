@@ -201,7 +201,7 @@ namespace districter_threaded
 
         public override string ToString() => code;
 
-        public bool canBeLost() => group?.canLose(this) ?? true;
+        public bool CanBeLost() => group?.CanLose(this) ?? true;
 
         // less than zero for smaller, zero for same position, greater than zero for larger
         public int CompareTo(object obj) 
@@ -221,7 +221,7 @@ namespace districter_threaded
                 throw new ArgumentException("Object is not a Unit");
         }
 
-        public void print()
+        public void Print()
         {
             Console.WriteLine(code);
             foreach (KeyValuePair<string, double> entry in _metrics)
@@ -238,7 +238,7 @@ namespace districter_threaded
         public HashSet<Unit> units = new HashSet<Unit>();
         public HashSet<string> adjacent => new HashSet<string>(units.SelectMany(unit => unit.adjacent).Where(code => !units.Any(u => u.code == code)));
 
-        public bool canLose(Unit unit)
+        public bool CanLose(Unit unit)
         {
             if (!units.Contains(unit))
             {
@@ -277,7 +277,7 @@ namespace districter_threaded
                 throw new ArgumentException("Object is not a Group");
         }
 
-        public void print()
+        public void Print()
         {
             Console.WriteLine(" [" + string.Join(", ", units) + "]");
         }
@@ -286,9 +286,9 @@ namespace districter_threaded
     class State
     {
         public List<Unit> unitlist;
-        public IEnumerable<Unit> canPlace => unitlist.Where(u => u.canBeLost());
+        public IEnumerable<Unit> canPlace => unitlist.Where(u => u.CanBeLost());
         public IEnumerable<Unit> unplaced => unitlist.Where(u => u.group == null).ToList();
-        public List<Group> groups;
+        public readonly List<Group> groups;
 
         public State(int numDist)
         {
@@ -296,7 +296,7 @@ namespace districter_threaded
             groups = new List<Group>(from i in Enumerable.Range(0,numDist) select new Group());
         }
 
-        public void doStep()
+        public void DoStep()
         {
             Group group = groups.Min();
 
@@ -313,7 +313,7 @@ namespace districter_threaded
 
             Console.WriteLine(unit);
             Console.WriteLine(" [" + string.Join(", ", placeable) + "]");
-            groups.ForEach(g => g.print());
+            groups.ForEach(g => g.Print());
             Console.WriteLine(" [" + string.Join(", ", unplaced) + "]");
             Console.WriteLine("");
         }
