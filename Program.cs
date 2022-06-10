@@ -8,10 +8,11 @@ namespace districter_threaded
         static void Main(string[] args)
         {
             Globals._read();
-            State state = Program.Solve(3, "Area (mi2)", "states");
+            State state = Program.Solve(2, "Population", "states");
 
             state.groups.ForEach(g => g.Print());
             Console.WriteLine(state.groups.Sum(g => g.units.Count));
+            state.PrintMap();
         }
 
         static public State Solve(int numGroups, string metricID, string scale) 
