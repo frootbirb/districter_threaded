@@ -48,12 +48,7 @@ internal class Group
 
     public IEnumerable<Unit> PlaceableIn()
     {
-        return state.unitlist
-            .Where(unit => unit.CanBePlacedIn(this) && unit.CanBePlaced())
-            .OrderBy(u => u.group != null)
-            .ThenBy(u => metric + u.metric < state.maxAcceptableMetric)
-            .ThenBy(u => u.group?.metric ?? 0)
-            .ThenBy(u => u.metric);
+        return state.unitlist.Where(unit => unit.CanBePlacedIn(this) && unit.CanBePlaced());
     }
 
     public void Print(Group group = null)

@@ -27,7 +27,14 @@ class State
         Group group = groups.MinBy(g => g.metric);
         Console.WriteLine($"Adding to {group.index}:");
         Print(group);
-        Unit unit = group.PlaceableIn().First();
+        Unit unit = group
+            .PlaceableIn()
+            .OrderBy(u => u.group != null)
+            // Proximity calc
+            .ThenBy(u => group.metric + u.metric < maxAcceptableMetric)
+            .ThenBy(u => -u.group?.metric ?? 0)
+            .ThenBy(u => u.metric)
+            .First();
         Console.WriteLine($"  Selected: {unit}");
         PrintMap();
         Console.WriteLine("");
@@ -41,7 +48,7 @@ class State
 
     public void PrintList(IEnumerable<Unit> list, string name, Group group = null)
     {
-        Console.Write($"{name,12}: [");
+        Console.Write($"{name, 12}: [");
         foreach (Unit u in list)
         {
             if (u.CanBePlacedIn(group) && u.CanBePlaced())
