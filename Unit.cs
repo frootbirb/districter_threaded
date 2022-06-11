@@ -21,11 +21,10 @@ internal class Unit
         }
     }
 
-    // todo public readonly Dictionary<Unit, int> distances;
     public HashSet<string> adjacent;
 
     private readonly Dictionary<string, double> _metrics;
-    internal List<string> keys => _metrics.Keys.ToList();
+    internal IEnumerable<string> keys => _metrics.Keys;
     public double metric => _metrics[Globals.metricID];
 
     public Unit(
@@ -61,7 +60,7 @@ internal class Unit
 
     public void Print()
     {
-        Console.WriteLine(code);
+        Console.WriteLine($"{code}: {group?.index ?? -1}");
         foreach (KeyValuePair<string, double> entry in _metrics)
         {
             Console.WriteLine("  {0} {1}", entry.Key, entry.Value);

@@ -6,7 +6,7 @@ namespace districter_threaded
     {
         static void Main(string[] args)
         {
-            Globals._read();
+            Globals.read();
             //Program.Solve(3, "Firearms", "states");
             Program.UnitTest(5);
         }
@@ -23,7 +23,7 @@ namespace districter_threaded
 
         static private void UnitTest(int maxCount)
         {
-            foreach (string scale in new[] { "states" })
+            foreach (string scale in Globals.scales)
             {
                 Globals.scale = scale;
                 for (int numGroups = 1; numGroups <= maxCount; numGroups++)

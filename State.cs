@@ -149,6 +149,10 @@ class State
 
     public void PrintMap()
     {
+        if (Globals.scale != "states") {
+            return;
+        }
+        
         Console.Write(
             @"         ,__                                                  _,
  \~\|  ~~---___              ,                          | \
