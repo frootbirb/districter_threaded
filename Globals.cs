@@ -8,15 +8,19 @@ public static class Globals
     static public string metricID;
     static public string scale;
 
-    static private Dictionary<string, List<Unit>> _unitlists = new Dictionary<string, List<Unit>>();
-    static internal List<Unit> unitlist => _unitlists[scale];
+    static private Dictionary<string, List<Unit>> _unitlists;
+    static private Dictionary<string, List<Unit>> unitlists
+    {
+        get { return _unitlists ??= read(); }
+    }
+    static internal List<Unit> unitlist => unitlists[scale];
 
-    static public IEnumerable<string> scales => _unitlists.Keys;
+    static public IEnumerable<string> scales => unitlists.Keys;
     static public IEnumerable<string> metricIDs => unitlist[0].keys;
 
-    static private void _read_data(string scale, string filename)
+    static private List<Unit> read_data(string filename)
     {
-        _unitlists[scale] = new List<Unit>();
+        List<Unit> unitlist = new List<Unit>();
         using (StreamReader reader = new StreamReader(filename))
         {
             List<string> vals,
@@ -29,7 +33,7 @@ public static class Globals
                     continue;
                 }
 
-                _unitlists[scale].Add(
+                unitlist.Add(
                     new Unit(
                         vals[0],
                         vals[1],
@@ -40,10 +44,12 @@ public static class Globals
                 );
             }
         }
+        return unitlist;
     }
 
-    static internal void read()
+    static private Dictionary<string, List<Unit>> read()
     {
+        Dictionary<string, List<Unit>> unitlists = new Dictionary<string, List<Unit>>();
         string directory = Directory.GetCurrentDirectory() + @"\assets";
         foreach (string filename in Directory.GetFiles(directory))
         {
@@ -53,9 +59,11 @@ public static class Globals
             switch (type)
             {
                 case "data":
-                    _read_data(scale, filename);
+                    unitlists[scale] = read_data(filename);
                     break;
             }
         }
+
+        return unitlists;
     }
 }

@@ -6,7 +6,6 @@ namespace districter_threaded
     {
         static void Main(string[] args)
         {
-            Globals.read();
             //Program.Solve(3, "Firearms", "states");
             Program.UnitTest(5);
         }
