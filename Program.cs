@@ -1,12 +1,14 @@
-﻿namespace districter_threaded
+﻿using System.Windows.Forms;
+
+namespace districter_threaded
 {
     class Program
     {
         static void Main(string[] args)
         {
             Globals._read();
-            Program.Solve(3, "Firearms", "states");
-            //Program.UnitTest(5);
+            //Program.Solve(3, "Firearms", "states");
+            Program.UnitTest(5);
         }
 
         static public State Solve(int numGroups, string metricID, string scale)
@@ -14,7 +16,7 @@
             Globals.scale = scale;
             Globals.metricID = metricID;
             State state = new State(numGroups);
-            while (state.DoStep()) { }
+            while (state.DoStep());
 
             return state;
         }
