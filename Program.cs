@@ -6,8 +6,8 @@ namespace districter_threaded
     {
         static void Main(string[] args)
         {
-            //Program.Solve(3, "Firearms", "states");
-            Program.UnitTest(5);
+            Program.Solve(3, "Firearms", "states").PrintMap();
+            //Program.UnitTest(5);
         }
 
         static public State Solve(int numGroups, string metricID, string scale)
