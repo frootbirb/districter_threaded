@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
+using System.Reflection;
 
 public static class Globals
 {
@@ -18,10 +19,11 @@ public static class Globals
     static public IEnumerable<string> scales => unitlists.Keys;
     static public IEnumerable<string> metricIDs => unitlist[0].keys;
 
-    static private List<Unit> read_data(string filename)
+    static private List<Unit> read_data(string resource)
     {
         List<Unit> unitlist = new List<Unit>();
-        using (StreamReader reader = new StreamReader(filename))
+        using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))
+        using (StreamReader reader = new StreamReader(stream))
         {
             List<string> vals,
                 keys = null;
@@ -50,16 +52,18 @@ public static class Globals
     static private Dictionary<string, List<Unit>> read()
     {
         Dictionary<string, List<Unit>> unitlists = new Dictionary<string, List<Unit>>();
-        string directory = Directory.GetCurrentDirectory() + @"\assets";
-        foreach (string filename in Directory.GetFiles(directory))
+        foreach (string resource in Assembly.GetExecutingAssembly().GetManifestResourceNames())
         {
-            List<string> meta = Path.GetFileNameWithoutExtension(filename).Split("_").ToList();
-            string scale = meta[0];
-            string type = meta[1];
+            List<string> meta = resource.Split(".").ToList();
+            List<string> resourcename = meta[meta.Count - 2].Split("_").ToList();
+            string scale = resourcename[0];
+            string type = resourcename[1];
+            Console.WriteLine(resource);
+            Console.WriteLine(scale + ": " + type);
             switch (type)
             {
                 case "data":
-                    unitlists[scale] = read_data(filename);
+                    unitlists[scale] = read_data(resource);
                     break;
             }
         }
