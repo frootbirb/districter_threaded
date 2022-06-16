@@ -25,6 +25,12 @@ internal class Group
             return true;
         }
 
+        // Don't allow stealing the last unit from a group
+        if (units.Count() == 1) 
+        {
+            return false;
+        }
+
         List<Unit> border = units.Where(u => unit.adjacent.Contains(u.code)).ToList();
 
         if (!border.Any())
@@ -52,6 +58,6 @@ internal class Group
 
     public void Print(Group group = null)
     {
-        state.PrintList(units, $"{index} ({metric})", group);
+        state.PrintList(units, $"{index} ({metric:.###})", group);
     }
 }

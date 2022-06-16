@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 class State
 {
@@ -108,7 +109,15 @@ class State
 
     public void PrintList(IEnumerable<Unit> list, string name, Group group = null)
     {
-        Console.Write($"{name, 12}: [");
+        if (Char.IsDigit(name, 0))
+        {
+            PrintInColor($"{name, 12}", Convert.ToInt32(Regex.Match(name, @"^\d+").Value));
+        }
+        else
+        {
+            Console.Write($"{name, 12}");
+        }
+        Console.Write(": [");
         foreach (Unit u in list)
         {
             if (u.CanBePlacedIn(group) && u.CanBePlaced())
@@ -136,7 +145,10 @@ class State
 
     public void Print(Group group = null)
     {
-        groups.ForEach(g => g.Print(group));
+        foreach (Group g in groups.OrderBy(g => g.metric).Reverse())
+        {
+            g.Print(group);
+        }
         PrintList(unplaced, "unplaced", group);
     }
 
@@ -163,9 +175,14 @@ class State
       AK      HI         \  |                     '\'
                           `~'";
 
-    public void PrintCode(string code)
+    private void PrintCode(string code)
     {
-        switch (unitlist.Where(u => u.code == code).FirstOrDefault().group?.index ?? -1)
+        PrintInColor(code, unitlist.Where(u => u.code == code).FirstOrDefault().group?.index ?? -1);
+    }
+
+    private void PrintInColor(string val, int group)
+    {
+        switch (group)
         {
             case 0:
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -188,7 +205,7 @@ class State
             default:
                 break;
         }
-        Console.Write(code);
+        Console.Write(val);
         Console.ResetColor();
     }
 
