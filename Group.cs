@@ -10,6 +10,7 @@ internal class Group
     public IEnumerable<string> adjacent =>
         units
             .SelectMany(unit => unit.adjacent)
+            .Distinct()
             .Where(code => !units.Any(unit => unit.code == code));
 
     public Group(State state)

@@ -9,19 +9,20 @@ public static class Globals
     static public string metricID;
     static public string scale;
 
-    static private Dictionary<string, List<Unit>> _unitlists;
-    static private Dictionary<string, List<Unit>> unitlists
+    static private Dictionary<string, Dictionary<string, Unit>> _unitlists;
+    static private Dictionary<string, Dictionary<string, Unit>> unitlists
     {
         get { return _unitlists ??= read(); }
     }
-    static internal List<Unit> unitlist => unitlists[scale];
+    static internal Dictionary<string, Unit> unitlist => unitlists[scale];
 
     static public IEnumerable<string> scales => unitlists.Keys;
-    static public IEnumerable<string> metricIDs => unitlist[0].keys;
+    // Get the values from the list
+    static public IEnumerable<string> metricIDs => unitlist.First().Value.keys;
 
-    static private List<Unit> read_data(string resource)
+    static private Dictionary<string, Unit> read_data(string resource)
     {
-        List<Unit> unitlist = new List<Unit>();
+        Dictionary<string, Unit> unitlist = new Dictionary<string, Unit>();
         using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))
         using (StreamReader reader = new StreamReader(stream))
         {
@@ -35,31 +36,28 @@ public static class Globals
                     continue;
                 }
 
-                unitlist.Add(
-                    new Unit(
-                        vals[0],
-                        vals[1],
-                        keys.Zip(vals.Skip(3))
-                            .ToDictionary(x => x.First, x => Convert.ToDouble(x.Second)),
-                        new HashSet<string>(vals[2].Split('|'))
-                    )
+                unitlist[vals[0]] = new Unit(
+                    vals[0],
+                    vals[1],
+                    keys.Zip(vals.Skip(3))
+                        .ToDictionary(x => x.First, x => Convert.ToDouble(x.Second)),
+                    new HashSet<string>(vals[2].Split('|', StringSplitOptions.RemoveEmptyEntries))
                 );
             }
         }
         return unitlist;
     }
 
-    static private Dictionary<string, List<Unit>> read()
+    static private Dictionary<string, Dictionary<string, Unit>> read()
     {
-        Dictionary<string, List<Unit>> unitlists = new Dictionary<string, List<Unit>>();
+        Dictionary<string, Dictionary<string, Unit>> unitlists =
+            new Dictionary<string, Dictionary<string, Unit>>();
         foreach (string resource in Assembly.GetExecutingAssembly().GetManifestResourceNames())
         {
             List<string> meta = resource.Split(".").ToList();
             List<string> resourcename = meta[meta.Count - 2].Split("_").ToList();
             string scale = resourcename[0];
             string type = resourcename[1];
-            Console.WriteLine(resource);
-            Console.WriteLine(scale + ": " + type);
             switch (type)
             {
                 case "data":

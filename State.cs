@@ -6,15 +6,19 @@ using System.Linq;
 
 class State
 {
-    public List<Unit> unitlist;
-    public IEnumerable<Unit> unplaced => unitlist.Where(u => u.group == null).ToList();
+    public IEnumerable<Unit> unitlist => unitdict.Select(entry => entry.Value);
+    private Dictionary<string, Unit> unitdict;
+    public IEnumerable<Unit> unplaced => unitlist.Where(u => u.group == null);
     public readonly List<Group> groups;
     public readonly double maxAcceptableMetric,
         minAcceptableMetric;
 
     public State(int numGroups)
     {
-        unitlist = Globals.unitlist.ConvertAll(unit => new Unit(unit));
+        unitdict = Globals.unitlist.ToDictionary(
+            entry => entry.Key,
+            entry => new Unit(entry.Value)
+        );
         groups = new List<Group>(from i in Enumerable.Range(0, numGroups) select new Group(this));
 
         double sumMetrics = unitlist.Sum(u => u.metric);
@@ -23,14 +27,16 @@ class State
         maxAcceptableMetric = Math.Max(avgMetric * 1.05, biggestMetric);
         minAcceptableMetric = avgMetric * 0.95;
 
-        Console.WriteLine($"Initialized for {numGroups} groups of {Globals.scale}, sorted by {Globals.metricID}");
+        Console.WriteLine(
+            $"Initialized for {numGroups} groups of {Globals.scale}, sorted by {Globals.metricID}"
+        );
     }
 
     public bool DoStep()
     {
         Group group = groups
             .OrderBy(g => g.units.Any())
-            .ThenBy(g => !unplaced.Any(u => g.adjacent.Contains(u.code)))
+            .ThenBy(g => g.adjacent.Any(u => unitdict[u].group == null))
             .ThenBy(g => g.metric)
             .First();
 #if PRINT
@@ -45,6 +51,7 @@ class State
             Console.WriteLine($"  Selected: {unit}");
             PrintMap();
             Console.WriteLine("");
+            Console.ReadKey();
 #endif
             unit.group = group;
             return !isDone();
@@ -149,10 +156,11 @@ class State
 
     public void PrintMap()
     {
-        if (Globals.scale != "states") {
+        if (Globals.scale != "states")
+        {
             return;
         }
-        
+
         Console.Write(
             @"         ,__                                                  _,
  \~\|  ~~---___              ,                          | \
