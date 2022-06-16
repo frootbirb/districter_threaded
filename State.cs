@@ -55,12 +55,9 @@ class State
             {
                 return a.group == null ? 1 : -1;
             }
-            else if (
-                (aadj = g.units.Where(u => a.adjacent.Contains(u.code)).Count())
-                != (badj = g.units.Where(u => b.adjacent.Contains(u.code)).Count())
-            )
+            else if ((aadj = g.DistanceTo(a)) != (badj = g.DistanceTo(b)))
             {
-                return aadj.CompareTo(badj);
+                return badj.CompareTo(aadj);
             }
             else if ((ametric = a.group?.metric ?? 0) != (bmetric = b.group?.metric ?? 0))
             {

@@ -53,6 +53,8 @@ internal class Group
         return !border.Any();
     }
 
+    public int DistanceTo(Unit unit) => -units.Where(u => unit.adjacent.Contains(u.code)).Count();
+
     public IEnumerable<Unit> placeable =>
         (
             adjacent.Any()
