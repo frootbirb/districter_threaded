@@ -9,20 +9,20 @@ public static class Globals
     static public string metricID;
     static public string scale;
 
-    static private Dictionary<string, Dictionary<string, Unit>> _unitlists;
-    static private Dictionary<string, Dictionary<string, Unit>> unitlists
+    static private Dictionary<string, Dictionary<string, Unit>> _unitdicts;
+    static private Dictionary<string, Dictionary<string, Unit>> unitdicts
     {
-        get { return _unitlists ??= read(); }
+        get { return _unitdicts ??= read(); }
     }
-    static internal Dictionary<string, Unit> unitlist => unitlists[scale];
+    static internal Dictionary<string, Unit> unitdict => unitdicts[scale];
 
-    static public IEnumerable<string> scales => unitlists.Keys;
+    static public IEnumerable<string> scales => unitdicts.Keys;
     // Get the values from the list
-    static public IEnumerable<string> metricIDs => unitlist.First().Value.keys;
+    static public IEnumerable<string> metricIDs => unitdict.First().Value.keys;
 
     static private Dictionary<string, Unit> read_data(string resource)
     {
-        Dictionary<string, Unit> unitlist = new Dictionary<string, Unit>();
+        Dictionary<string, Unit> unitdict = new Dictionary<string, Unit>();
         using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))
         using (StreamReader reader = new StreamReader(stream))
         {
@@ -36,7 +36,7 @@ public static class Globals
                     continue;
                 }
 
-                unitlist[vals[0]] = new Unit(
+                unitdict[vals[0]] = new Unit(
                     vals[0],
                     vals[1],
                     keys.Zip(vals.Skip(3))
@@ -45,12 +45,12 @@ public static class Globals
                 );
             }
         }
-        return unitlist;
+        return unitdict;
     }
 
     static private Dictionary<string, Dictionary<string, Unit>> read()
     {
-        Dictionary<string, Dictionary<string, Unit>> unitlists =
+        Dictionary<string, Dictionary<string, Unit>> unitdicts =
             new Dictionary<string, Dictionary<string, Unit>>();
         foreach (string resource in Assembly.GetExecutingAssembly().GetManifestResourceNames())
         {
@@ -61,11 +61,11 @@ public static class Globals
             switch (type)
             {
                 case "data":
-                    unitlists[scale] = read_data(resource);
+                    unitdicts[scale] = read_data(resource);
                     break;
             }
         }
 
-        return unitlists;
+        return unitdicts;
     }
 }

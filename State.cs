@@ -17,7 +17,7 @@ class State
 
     public State(int numGroups)
     {
-        unitdict = Globals.unitlist.ToDictionary(
+        unitdict = Globals.unitdict.ToDictionary(
             entry => entry.Key,
             entry => new Unit(entry.Value)
         );
