@@ -20,6 +20,7 @@ internal class Group
 
     public bool CanLose(Unit unit)
     {
+        // "can lose" this unit if it doesn't have the unit
         if (!units.Contains(unit))
         {
             return true;
