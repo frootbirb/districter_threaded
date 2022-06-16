@@ -1,13 +1,11 @@
-﻿using System.Windows.Forms;
-
-namespace districter_threaded
+﻿namespace districter_threaded
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Program.Solve(3, "Firearms", "states").PrintMap();
-            //Program.UnitTest(5);
+            //Program.Solve(2, "Population", "counties").PrintMap();
+            Program.UnitTest(7);
         }
 
         static public State Solve(int numGroups, string metricID, string scale)
@@ -22,7 +20,8 @@ namespace districter_threaded
 
         static private void UnitTest(int maxCount)
         {
-            foreach (string scale in Globals.scales)
+            // foreach (string scale in Globals.scales)
+            foreach (string scale in new string[]{"states"})
             {
                 Globals.scale = scale;
                 for (int numGroups = 1; numGroups <= maxCount; numGroups++)
@@ -30,7 +29,10 @@ namespace districter_threaded
                     foreach (string metricID in Globals.metricIDs)
                     {
                         Globals.metricID = metricID;
-                        Program.Solve(numGroups, metricID, scale).PrintMap();
+                        State state = Program.Solve(numGroups, metricID, scale);
+                        state.PrintMap();
+                        state.Print();
+                        System.Console.ReadKey();
                     }
                 }
             }
