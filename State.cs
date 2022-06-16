@@ -1,4 +1,4 @@
-//#define PRINT
+#define PRINT
 
 using System;
 using System.Collections.Generic;
@@ -32,19 +32,57 @@ class State
         );
     }
 
+    public class UnitSorter : IComparer<Unit>
+    {
+        private readonly Group g;
+
+        internal UnitSorter(Group g)
+        {
+            this.g = g;
+        }
+
+        public int Compare(Unit a, Unit b)
+        {
+            int aadj,
+                badj;
+            double ametric,
+                bmetric;
+            // If the groups are not both null, the one that is is sorted higher
+            if ((a.group == null) != (b.group == null))
+            {
+                return a.group == null ? 1 : -1;
+            }
+            else if (
+                (aadj = g.units.Where(u => a.adjacent.Contains(u.code)).Count())
+                != (badj = g.units.Where(u => b.adjacent.Contains(u.code)).Count())
+            )
+            {
+                return aadj.CompareTo(badj);
+            }
+            else if ((ametric = a.group?.metric ?? 0) != (bmetric = b.group?.metric ?? 0))
+            {
+                return bmetric.CompareTo(ametric);
+            }
+            else
+            {
+                return a.metric.CompareTo(b.metric);
+            }
+        }
+    }
+
     public bool DoStep()
     {
         Group group = groups
             .OrderBy(g => g.units.Any())
-            .ThenBy(g => g.adjacent.Any(u => unitdict[u].group == null))
+            .ThenBy(g => !g.adjacent.Any(u => unitdict[u].group == null))
             .ThenBy(g => g.metric)
             .First();
 #if PRINT
         Console.WriteLine($"Adding to {group.index}:");
-        PrintList(group.sortedPlaceable.Reverse(), "placeable");
+        PrintList(group.placeable.OrderBy(u => u, new UnitSorter(group)), "placeable");
         Print(group);
 #endif
-        Unit unit = group.sortedPlaceable.LastOrDefault();
+        Unit unit = group.placeable.MaxBy(u => u, new UnitSorter(group));
         if (unit != null)
         {
 #if PRINT

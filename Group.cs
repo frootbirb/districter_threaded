@@ -50,13 +50,6 @@ internal class Group
     public IEnumerable<Unit> placeable =>
         state.unitlist.Where(unit => unit.CanBePlacedIn(this) && unit.CanBePlaced());
 
-    public IEnumerable<Unit> sortedPlaceable =>
-        placeable
-            .OrderBy(u => u.group == null)
-            .ThenBy(u => units.Where(unit => u.adjacent.Contains(unit.code)).Count())
-            .ThenBy(u => u.group?.metric ?? 0)
-            .ThenBy(u => u.metric);
-
     public void Print(Group group = null)
     {
         state.PrintList(units, $"{index} ({metric})", group);
