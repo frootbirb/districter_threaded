@@ -26,7 +26,7 @@ internal class Group
         }
 
         // Don't allow stealing the last unit from a group
-        if (units.Count() == 1) 
+        if (units.Count() == 1)
         {
             return false;
         }
@@ -54,7 +54,11 @@ internal class Group
     }
 
     public IEnumerable<Unit> placeable =>
-        state.unitlist.Where(unit => unit.CanBePlacedIn(this) && unit.CanBePlaced());
+        (
+            adjacent.Any()
+                ? adjacent.Select(code => state.unitdict[code]).Concat(state.noAdjacent)
+                : state.unitlist
+        ).Where(unit => unit.CanBePlacedIn(this) && unit.CanBePlaced());
 
     public void Print(Group group = null)
     {

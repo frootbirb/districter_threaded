@@ -8,7 +8,8 @@ using System.Text.RegularExpressions;
 class State
 {
     public IEnumerable<Unit> unitlist => unitdict.Select(entry => entry.Value);
-    private Dictionary<string, Unit> unitdict;
+    public readonly List<Unit> noAdjacent;
+    public readonly Dictionary<string, Unit> unitdict;
     public IEnumerable<Unit> unplaced => unitlist.Where(u => u.group == null);
     public readonly List<Group> groups;
     public readonly double maxAcceptableMetric,
@@ -20,6 +21,7 @@ class State
             entry => entry.Key,
             entry => new Unit(entry.Value)
         );
+        noAdjacent = unitlist.Where(u => !u.adjacent.Any()).ToList();
         groups = new List<Group>(from i in Enumerable.Range(0, numGroups) select new Group(this));
 
         double sumMetrics = unitlist.Sum(u => u.metric);
@@ -177,7 +179,7 @@ class State
 
     private void PrintCode(string code)
     {
-        PrintInColor(code, unitlist.Where(u => u.code == code).FirstOrDefault().group?.index ?? -1);
+        PrintInColor(code, unitdict[code].group?.index ?? -1);
     }
 
     private void PrintInColor(string val, int group)
