@@ -52,10 +52,11 @@ internal class Unit
 
     public bool CanBePlaced() => group?.CanLose(this) ?? true;
 
+    public bool IsNotBannedGroup(Group g) => g != this.group && g != this.lastGroup;
+
     public bool CanBePlacedIn(Group g) =>
         g is not null
-        && g != this.group
-        && g != this.lastGroup
+        && IsNotBannedGroup(g)
         && (!g.adjacent.Any() || g.adjacent.Contains(this.code) || !adjacent.Any());
 
     public void Print()

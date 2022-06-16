@@ -60,7 +60,7 @@ internal class Group
             adjacent.Any()
                 ? adjacent.Select(code => state.unitdict[code]).Concat(state.noAdjacent)
                 : state.unitlist
-        ).Where(unit => unit.CanBePlacedIn(this) && unit.CanBePlaced());
+        ).Where(unit => unit.IsNotBannedGroup(this) && unit.CanBePlaced());
 
     public void Print(Group group = null)
     {
