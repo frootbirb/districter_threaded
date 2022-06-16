@@ -7,11 +7,16 @@ internal class Group
     public HashSet<Unit> units = new HashSet<Unit>();
     private readonly State state;
     public int index => state.groups.IndexOf(this);
-    public IEnumerable<string> adjacent =>
-        units
+    public List<string> adjacent = new List<string>();
+
+    internal void RecalculateAdjacency()
+    {
+        adjacent = units
             .SelectMany(unit => unit.adjacent)
             .Distinct()
-            .Where(code => !units.Any(unit => unit.code == code));
+            .Where(code => !units.Any(unit => unit.code == code))
+            .ToList();
+    }
 
     public Group(State state)
     {

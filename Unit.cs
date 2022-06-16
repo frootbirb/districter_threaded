@@ -18,6 +18,8 @@ internal class Unit
             lastGroup = _group;
             _group = value;
             _group.units.Add(this);
+            _group.RecalculateAdjacency();
+            lastGroup?.RecalculateAdjacency();
         }
     }
 
